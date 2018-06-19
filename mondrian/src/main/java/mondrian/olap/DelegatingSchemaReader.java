@@ -75,7 +75,12 @@ public abstract class DelegatingSchemaReader implements SchemaReader {
     }
 
     public List<Member> getMemberChildren(Member member) {
-        return schemaReader.getMemberChildren(member);
+        //https://community.jaspersoft.com/jasperreports-server/issues/3694
+        try {
+             return schemaReader.getMemberChildren(member);
+        } catch (java.util.EmptyStackException e) {
+            return schemaReader.withLocus().getMemberChildren(member);
+        }
     }
 
     public List<Member> getMemberChildren(List<Member> members) {
